@@ -50,7 +50,7 @@ class UnlimitedNumberWidget extends NumberWidget {
 
     $element['label_number'] = [
       '#type' => 'textfield',
-      '#title' => t('Unlimited Label'),
+      '#title' => t('Number Label'),
       '#default_value' => $this->getSetting('label_number'),
       '#description' => t('Text that will be used for the number radio.'),
     ];
