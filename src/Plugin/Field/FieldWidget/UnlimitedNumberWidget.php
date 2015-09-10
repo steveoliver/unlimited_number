@@ -10,7 +10,7 @@ namespace Drupal\unlimited_number\Plugin\Field\FieldWidget;
 use Drupal\Core\Field\Plugin\Field\FieldWidget\NumberWidget;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Component\Utility\SafeMarkup;
+use Drupal\unlimited_number\Element\UnlimitedNumber;
 
 /**
  * Plugin implementation of the 'unlimited_number' widget.
@@ -63,58 +63,38 @@ class UnlimitedNumberWidget extends NumberWidget {
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
     $value = isset($items[$delta]->value) ? $items[$delta]->value : NULL;
-    $unlimited = empty($value);
-    $parents = [$items->getName(), $delta, 'unlimited_number'];
+    if (isset($value)) {
+      $default_value = empty($value) ? UnlimitedNumber::UNLIMITED : $value;
+    }
+    else {
+      $default_value = NULL;
+    }
 
     $form_element['unlimited_number'] = $element + [
-      '#type' => 'radios',
-      '#options' => NULL,
-      '#title' => $element['#title'],
-      '#description' => $element['#description'],
-      '#tree' => FALSE,
-    ];
-
-    $form_element['unlimited_number']['unlimited']['radio'] = [
-      '#type' => 'radio',
-      '#title' => SafeMarkup::checkPlain($this->getSetting('label_unlimited')),
-      '#return_value' => 'unlimited',
-      '#parents' => $parents,
-      '#default_value' => isset($value) && $unlimited,
-    ];
-
-    $form_element['unlimited_number']['limited'] = [
-      '#prefix' => '<div class="form-item container-inline">',
-      '#suffix' => '</div>',
-    ];
-
-    $form_element['unlimited_number']['limited']['radio'] = [
-      '#type' => 'radio',
-      '#title' => SafeMarkup::checkPlain($this->getSetting('label_number')),
-      '#return_value' => 'limited',
-      '#parents' => $parents,
-      '#default_value' => isset($value) && !$unlimited,
-    ];
-
-    $number_element = parent::formElement($items, $delta, [], $form, $form_state);
-    if ($unlimited) {
-      $number_element['value']['#default_value'] = '';
-    }
-    $form_element['unlimited_number']['limited']['value'] = $number_element['value'] + [
-      '#parents' => [$items->getName(), $delta, 'number'],
+      '#type' => 'unlimited_number',
+      '#default_value' => $default_value,
+      '#min' => 1,
+      '#options' => [
+        'unlimited' => $this->getSetting('label_unlimited'),
+        'limited' => $this->getSetting('label_limited'),
+      ],
+      '#parents' => [$items->getName(), $delta, 'unlimited_number'],
     ];
 
     return $form_element;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
     $new_values = [];
     foreach ($values as $value) {
-      if ($value['unlimited_number'] == 'unlimited') {
-        $new_values[]['value'] = 0;
+      $number = $value['unlimited_number'];
+      if ($value['unlimited_number'] == UnlimitedNumber::UNLIMITED) {
+        $number = 0;
       }
-      else {
-        $new_values[]['value'] = $value['number'];
-      }
+      $new_values[]['value'] = $number;
     }
     return $new_values;
   }
