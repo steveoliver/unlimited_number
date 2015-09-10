@@ -102,6 +102,8 @@ class UnlimitedNumber extends FormElement {
       '#type' => 'number',
       '#parents' => array_merge($element['#parents'], ['number']),
       '#default_value' => is_numeric($value) ? $value : NULL,
+      '#field_prefix' => isset($element['#field_prefix']) ? $element['#field_prefix'] : NULL,
+      '#field_suffix' => isset($element['#field_suffix']) ? $element['#field_suffix'] : NULL,
       '#min' => isset($element['#min']) ? $element['#min'] : NULL,
       '#max' => isset($element['#max']) ? $element['#max'] : NULL,
       '#step' => isset($element['#step']) ? $element['#step'] : NULL,
