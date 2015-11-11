@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\inline_entity_form\Element\UnlimitedNumber.
+ * Contains \Drupal\unlimited_number\Element\UnlimitedNumber.
  */
 
 namespace Drupal\unlimited_number\Element;
