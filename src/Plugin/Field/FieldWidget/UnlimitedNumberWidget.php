@@ -83,7 +83,7 @@ class UnlimitedNumberWidget extends NumberWidget {
       '#max' => is_numeric($field_settings['max']) ? $field_settings['max'] : NULL,
       '#options' => [
         'unlimited' => $this->getSetting('label_unlimited'),
-        'limited' => $this->getSetting('label_limited'),
+        'limited' => $this->getSetting('label_number'),
       ],
       '#parents' => [$items->getName(), $delta, 'unlimited_number'],
     ];
