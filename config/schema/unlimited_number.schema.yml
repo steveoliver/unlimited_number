@@ -1,5 +1,5 @@
 field.widget.settings.unlimited_number:
-  type: mapping
+  type: field.widget.settings.number
   label: 'Unlimited number settings'
   mapping:
     value_unlimited:
@@ -11,6 +11,3 @@ field.widget.settings.unlimited_number:
     label_number:
       type: string
       label: 'Limited Label'
-    placeholder:
-      type: label
-      label: 'Placeholder'
